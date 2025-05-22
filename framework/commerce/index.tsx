@@ -24,6 +24,7 @@ const Commerce = createContext<CommerceContextValue<any> | {}>({})
 
 export type Provider = CommerceConfig & {
   fetcher: Fetcher
+  logo?: StaticImageData
   cart?: {
     useCart?: SWRHook<Cart.GetCartHook>
     useAddItem?: MutationHook<Cart.AddItemHook>
@@ -67,6 +68,7 @@ export type Provider = CommerceConfig & {
 export type CommerceConfig = {
   locale: string
   cartCookie: string
+  logo?: StaticImageData
 }
 
 export type CommerceContextValue<P extends Provider> = {
@@ -96,10 +98,10 @@ export function CoreCommerceProvider<P extends Provider>({
   const fetcherRef = useRef(provider.fetcher)
   // If the parent re-renders this provider will re-render every
   // consumer unless we memoize the config
-  const { locale, cartCookie } = providerRef.current
+  const { locale, cartCookie, logo } = providerRef.current
   const cfg = useMemo(
-    () => ({ providerRef, fetcherRef, locale, cartCookie }),
-    [locale, cartCookie]
+    () => ({ providerRef, fetcherRef, locale, cartCookie, logo }),
+    [locale, cartCookie, logo]
   )
 
   return <Commerce.Provider value={cfg}>{children}</Commerce.Provider>
